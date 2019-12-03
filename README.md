@@ -23,7 +23,7 @@ Schema payload would look as below:
   to: ['jack@twitter.com'], // required, array of emails
   bcc: [], // array of emails
   cc: [], // array of emails
-  content: 'Hi Jack!', // required, email message body content
+  content: 'Hi Jack!', // required, string format of email message body content
 }
 ```
 
@@ -65,6 +65,6 @@ yarn test
 
 ## Things to note
 
-Currently, the email message is set to send in plain text format. There isn't any back-pressuring (rate-limitting) implemented on this service. For most part of the config, it can be found in the `src/config.js` file. Ideally, a pipeline will be implemented, given if this is to be pushed for production, which will do checks on linting, testing and formatting at minimal, before deploying it.
+Currently, the email message is set to send in plain text format. There isn't any back-pressuring (rate-limitting) implemented on this service. For most part of the config, it can be found in the `src/config.js` file. Ideally, a pipeline will be implemented which will do checks on linting, testing and formatting at minimal, before deploying it for production.
 
-An endpoint is available to be used and try with at: `https://simple-mailer-service.herokuapp.com/v1/mail/send` (POST endpoint).
+An endpoint is available to be used and try with at: `https://simple-mailer-service.herokuapp.com/v1/mail/send`.
