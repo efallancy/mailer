@@ -15,6 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Deploy to Heroku
+        if: github.ref == 'refs/heads/master' && job.status == 'success'
         run: |
           ./ci/deploy.sh ${{ secrets.HEROKU_APP }}
         env:
