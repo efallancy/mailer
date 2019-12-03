@@ -55,19 +55,19 @@ export async function sendMail(recipient, content) {
     };
   }
 
-  let personalizations = {
+  let personalization = {
     to: receiverRecipients,
     subject: config.sendgrid.emailSubject,
   };
 
   // If found with all valid email(s) for CC recipients, add into "personalization" payload
   if (ccRecipients.length) {
-    personalizations = { ...personalizations, cc: ccRecipients };
+    personalization = { ...personalization, cc: ccRecipients };
   }
 
   // If found with all valid email(s) for BCC recipients, add into "personalization" payload
   if (bccRecipients.length) {
-    personalizations = { ...personalizations, bcc: bccRecipients };
+    personalization = { ...personalization, bcc: bccRecipients };
   }
 
   const res = await axios
@@ -75,7 +75,7 @@ export async function sendMail(recipient, content) {
       'https://api.sendgrid.com/v3/mail/send',
       {
         from: { email: config.sendgrid.sender },
-        personalizations,
+        personalizations: [personalization],
         content: [
           {
             type: 'text/plain',

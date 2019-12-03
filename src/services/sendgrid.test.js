@@ -114,7 +114,7 @@ describe('sendMail', () => {
         'https://api.sendgrid.com/v3/mail/send',
         {
           from: { email: emailSender },
-          personalizations: { to: allValidEmails.map(email => ({ email })) },
+          personalizations: [{ to: allValidEmails.map(email => ({ email })) }],
           content: [{ type: 'text/plain', value: content }],
         },
         {
