@@ -18,7 +18,7 @@ Used to send in a request to send email to intended recipients, e.g.: to, cc, bc
 
 Schema payload would look as below:
 
-```json
+```
 {
   to: ['jack@twitter.com'], // required, array of emails
   bcc: [], // array of emails
