@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Deploy to Heroku
-        run:
-          - ./ci/deploy.sh ${{ secrets.HEROKU_APP }}
+        run: |
+          ./ci/deploy.sh ${{ secrets.HEROKU_APP }}
