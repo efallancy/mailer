@@ -42,7 +42,8 @@ yarn start:dev
 To start the app in production mode, run the following command:
 
 ```sh
-yarn start
+# Make sure to run the build before starting the app
+yarn build && yarn start
 ```
 
 By default, the service is set to start by using port `3000`. However, you could set the port to listen based on your config through `PORT` environment name.

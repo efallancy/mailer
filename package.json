@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Emmanuel Fallancy <emmanuel.fallancy@gmail.com>",
   "scripts": {
-    "start": "npm run build && node lib/index.js",
+    "start": "node lib/index.js",
     "build": "babel src --out-dir lib",
     "start:dev": "nodemon --exec babel-node src/index.js --ignore \"src/__tests__\"",
     "test": "jest",
