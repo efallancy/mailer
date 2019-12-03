@@ -10,7 +10,7 @@ There are few endpoints available in within this API service:
 
 **GET /health**
 
-Used to check ping or check the up status of the service.
+Used to ping or check the up status of the service.
 
 **POST /v1/mail/send**
 
@@ -52,8 +52,8 @@ Head over to `http://localhost:3000` (if `PORT` not specified) to try it.
 
 To be able to send email and content of this service, there are 2 main environment variables needed to be set.
 
-`SENDGRID_EMAIL_SENDER` - used for indicating the sender email
-`SENDGRID_API_KEY` - the SendGrid API key used for making request
+- `SENDGRID_EMAIL_SENDER` - used for indicating the sender email
+- `SENDGRID_API_KEY` - the SendGrid API key used for making request
 
 ## Testing
 
@@ -67,4 +67,4 @@ yarn test
 
 Currently, the email message is set to send in plain text format. There isn't any back-pressuring (rate-limitting) implemented on this service. For most part of the config, it can be found in the `src/config.js` file. Ideally, a pipeline will be implemented, given if this is to be pushed for production, which will do checks on linting, testing and formatting at minimal, before deploying it.
 
-An endpoint is available to be used and try with at: `https://simple-mailer-service.herokuapp.com/v1/mail/send`.
+An endpoint is available to be used and try with at: `https://simple-mailer-service.herokuapp.com/v1/mail/send` (POST endpoint).
