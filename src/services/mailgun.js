@@ -26,45 +26,36 @@ export async function sendMail(sender, recipient, subject, content) {
     };
   }
 
-  let personalization = {
-    to: receiverRecipients.map(email => ({ email })),
+  let payload = {
+    from: sender,
+    to: receiverRecipients.join(','),
     subject,
+    text: content,
   };
 
-  // If found with all valid email(s) for CC recipients, add into "personalization" payload
+  // If found with all valid email(s) for CC recipients, add into payload
   if (ccRecipients.length) {
-    personalization = {
-      ...personalization,
-      cc: ccRecipients.map(email => ({ email })),
-    };
+    payload = { ...payload, cc: ccRecipients.join(',') };
   }
 
-  // If found with all valid email(s) for BCC recipients, add into "personalization" payload
+  // If found with all valid email(s) for BCC recipients, add into payload
   if (bccRecipients.length) {
-    personalization = {
-      ...personalization,
-      bcc: bccRecipients.map(email => ({ email })),
-    };
+    payload = { ...payload, bcc: bccRecipients.join(',') };
   }
 
   const res = await axios
     .post(
-      'https://api.sendgrid.com/v3/mail/send',
-      {
-        from: { email: sender },
-        personalizations: [personalization],
-        content: [
-          {
-            type: 'text/plain',
-            value: content,
-          },
-        ],
-      },
+      `https://api.mailgun.net/v3/${config.mailgun.domain}/messages`,
+      {},
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.sendgrid.apiKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        auth: {
+          username: 'api',
+          password: config.mailgun.apiKey,
+        },
+        params: payload,
       }
     )
     .then(() => {
@@ -73,8 +64,8 @@ export async function sendMail(sender, recipient, subject, content) {
     .catch(({ response }) => {
       const { data } = response;
       const err =
-        data && Array.isArray(data.errors)
-          ? data.errors[0]
+        data && data.message
+          ? { message: data.message }
           : { message: 'Fail to mail recipient' };
       return { message: null, errorMessage: err.message };
     });

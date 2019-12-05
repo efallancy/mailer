@@ -2,7 +2,7 @@
   "extends": ["semistandard"],
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
-    "space-before-function-paren": ["error", {"anonymous": "always", "named": "never", "asyncArrow": "ignore"}],
+    "space-before-function-paren": ["error", {"anonymous": "ignore", "named": "never", "asyncArrow": "ignore"}],
     "prefer-promise-reject-errors": ["off"]
   },
   "env": {

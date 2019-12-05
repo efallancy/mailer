@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { sendMail } from './sendgrid';
+import { sendMail } from './mailgun';
 
 const allValidEmails = ['alpaca@gmail.com', 'anakin.skywalker@yahoo.com'];
 
 jest.mock('axios');
 jest.mock('../config', () => ({
-  sendgrid: { apiKey: 'abc123' },
+  mailgun: { domain: 'simplemailer.dev', apiKey: 'abc123' },
 }));
 
 beforeEach(() => {
@@ -13,16 +13,14 @@ beforeEach(() => {
 });
 
 describe('sendMail', () => {
-  describe('when successfully sending request to Sendgrid', () => {
+  describe('when successfully sending request to Mailgun', () => {
     it('should return object with value in property "message" and "null" in property "errorMessage"', async () => {
       const sender = 'example.sender@gmail.com';
-      const subject = 'Sent from Sendgrid';
-      const apiKey = 'abc123';
-      const recipient = {
-        to: allValidEmails,
-      };
-
+      const subject = 'Sent from Mailgun';
+      const recipient = { to: allValidEmails };
       const content = 'Hello world!';
+
+      const apiKey = 'abc123';
 
       // Mock implementation for HTTP request
       axios.post.mockImplementation(() => Promise.resolve());
@@ -32,18 +30,21 @@ describe('sendMail', () => {
         errorMessage: null,
       });
       expect(axios.post).toHaveBeenCalledWith(
-        'https://api.sendgrid.com/v3/mail/send',
-        {
-          from: { email: sender },
-          personalizations: [
-            { subject, to: allValidEmails.map(email => ({ email })) },
-          ],
-          content: [{ type: 'text/plain', value: content }],
-        },
+        'https://api.mailgun.net/v3/simplemailer.dev/messages',
+        {},
         {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          auth: {
+            username: 'api',
+            password: apiKey,
+          },
+          params: {
+            from: sender,
+            to: recipient.to.join(','),
+            subject,
+            text: content,
           },
         }
       );
@@ -54,7 +55,7 @@ describe('sendMail', () => {
     it('should return generic error message', async () => {
       const sender = 'example@gmail.com';
       const recipient = null;
-      const subject = 'Sent from Sendgrid';
+      const subject = 'Sent from Mailgun';
       const content = 'Hello no recipient!';
 
       // Mock implementation for HTTP request
@@ -71,8 +72,8 @@ describe('sendMail', () => {
   describe('when no receiver recipient found', () => {
     it('should return about no receipent error message', async () => {
       const sender = 'example@gmail.com';
-      const recipient = { to: [] };
-      const subject = 'Sent from Sendgrid';
+      const recipient = {};
+      const subject = 'Sent from Mailgun';
       const content = 'Hello no recipient!';
 
       // Mock implementation for HTTP request
@@ -86,11 +87,11 @@ describe('sendMail', () => {
     });
   });
 
-  describe('when receiving error on sending request to Sendgrid', () => {
+  describe('when receiving error on sending request to Mailgun', () => {
     it('should return default error message when no error message found', async () => {
       const sender = 'example@gmail.com';
       const recipient = { to: allValidEmails };
-      const subject = 'Sent from Sendgrid';
+      const subject = 'Sent from Mailgun';
       const content = 'Hello there!';
 
       // Mock implementation for HTTP request
@@ -108,13 +109,13 @@ describe('sendMail', () => {
     it('should return first error message found when response received', async () => {
       const sender = 'example@gmail.com';
       const recipient = { to: allValidEmails };
-      const subject = 'Sent from Sendgrid';
+      const subject = 'Sent from Mailgun';
       const content = 'Hello there!';
 
       // Mock implementation for HTTP request
       axios.post.mockImplementation(() =>
         Promise.reject({
-          response: { data: { errors: [{ message: 'Invalid email found' }] } },
+          response: { data: { message: 'Invalid email found' } },
         })
       );
 

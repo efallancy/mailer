@@ -2,9 +2,11 @@ import uuid from 'uuid';
 
 const config = {
   sendgrid: {
-    sender: process.env.SENDGRID_EMAIL_SENDER,
     apiKey: process.env.SENDGRID_API_KEY,
-    emailSubject: 'Sent from Sendgrid',
+  },
+  mailgun: {
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN_NAME,
   },
   fastify: {
     logger: true,
