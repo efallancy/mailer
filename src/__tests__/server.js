@@ -81,7 +81,6 @@ describe('Server', () => {
   it('should return 400 Bad Request when payload not satisfied', async () => {
     const someValidEmails = ['james@docker.com', 'notjames.com'];
 
-    // eslint-disable-next-line
     sendgrid.sendMail.mockImplementation(() =>
       Promise.resolve({ errorMessage: null, message: 'All good' })
     );

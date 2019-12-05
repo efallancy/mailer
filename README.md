@@ -4,7 +4,7 @@ A simple email service that sends messages to recipients.
 
 ## Overview
 
-This API service serves to send email which utilises SendGrid as its service primary provider and Mailgun as its secondary provider.
+This API service serves to send email which utilises [SendGrid](https://sendgrid.com/) as its service primary provider and [Mailgun](https://www.mailgun.com/) as its secondary provider.
 
 It uses Fastify as its server, Joi for schema validation.
 
